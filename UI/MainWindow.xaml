@@ -38,6 +38,14 @@
                 <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Name}" Width="*"/>
                 <DataGridTextColumn Header="URL" Binding="{Binding URL}" Width="2*"/>
             </DataGrid.Columns>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Foreground" Value="#D6D6D6"/>
+                    <Setter Property="Background" Value="#2A2A2A"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
 
         </DataGrid>
 
