@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using Data;
 
 namespace UI
 {
@@ -9,6 +10,17 @@ namespace UI
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+
+            // Ensure DB created
+            using (var db = new MusicDbContext())
+            {
+                db.Database.EnsureCreated();
+            }
+        }
     }
 
 }

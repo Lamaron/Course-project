@@ -11,6 +11,7 @@ namespace Domain
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<AudioFile> AudioFiles { get; set; }
+
+        public ICollection<AudioFile> Tracks { get; set; }
     }
 }

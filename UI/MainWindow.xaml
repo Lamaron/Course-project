@@ -5,66 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="Музыкальный плеер" Height="650" Width="1000">
-    <Grid>
+        Title="Музыкальный плеер" Height="600" Width="900">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBox x:Name="SearchTextBox" Grid.Row="0" Margin="10"
-                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                 Tag="Поиск по названию или исполнителю"/>
-        <DataGrid x:Name="MainDataGrid" Grid.Row="1" Margin="10,10,0,10"
-                  ItemsSource="{Binding FilteredTracks}"
-                  SelectedItem="{Binding SelectedTrack}"
-                  IsReadOnly="True" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Альбом" Binding="{Binding Name}" Width="*"/>
-                <DataGridTextColumn Header="Длительность" Binding="{Binding Name}" Width="Auto"/>
-            </DataGrid.Columns>
-            <DataGrid.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick"
-                              Command="{Binding PlayTrackCommand}"
-                              CommandParameter="{Binding SelectedItem, ElementName=MainDataGrid}"/>
-            </DataGrid.InputBindings>
-        </DataGrid>
 
-        <StackPanel x:Name="NowPlayingPanel" Grid.Row="2" Orientation="Horizontal" Margin="10,0,10,5">
-            <Image Source="{Binding CurrentTrack.CoverArt}" Width="40" Height="40" Margin="0,0,10,0"/>
-            <TextBlock Text="{Binding CurrentTrack.Autor}" FontWeight="Bold"/>
-            <TextBlock Text=" - "/>
-            <TextBlock Text="{Binding CurrentTrack.Name}"/>
+        <!-- Верхняя панель поиска и кнопки -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+            <TextBox x:Name="SearchTextBox" Width="300" Height="28" VerticalAlignment="Center" Text="Поиск по треку/исполнителю" />
+            <Button Content="Поиск" Margin="6,0,0,0" Click="SearchButton_Click" />
+            <Button Content="Создать плейлист" Margin="10,0,0,0" Click="CreatePlaylist_Click" />
+            <Button Content="Управление библиотекой" Margin="10,0,0,0" Click="OpenLibrary_Click" />
+            <Button Content="Премиум" Margin="10,0,0,0" Click="OpenPayment_Click" />
         </StackPanel>
 
-        <Grid x:Name="MediaContrilPanel" Grid.Row="3" Height="70" Background="#f0f0f0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <!-- Таблица треков -->
+        <DataGrid x:Name="MainDataGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                  MouseDoubleClick="MainDataGrid_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*" />
+                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Author}" Width="200" />
+                <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Name}" Width="150" />
+                <DataGridTextColumn Header="URL" Binding="{Binding URL}" Width="200" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="10">
-                <Button Content="⏮" Command="{Binding PreviousTrackCommand}" Width="30" Height="30" Margin="5"/>
-                <Button Content="▶ / ⏸" Command="{Binding PlayPauseCommand}" Width="40" Height="40" Margin="5"/>
-                <Button Content="⏭" Command="{Binding NextTrackCommand}" Width="30" Height="30" Margin="5"/>
+        <!-- Нижняя панель воспроизведения -->
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,6,0,0">
+                <Button Content="Previous" Click="PreviousButton_Click" />
+                <Button Content="Play" Margin="6,0,0,0" Click="PlayButton_Click" />
+                <Button Content="Pause" Margin="6,0,0,0" Click="PauseButton_Click" />
+                <Button Content="Next" Margin="6,0,0,0" Click="NextButton_Click" />
+
+                <TextBlock x:Name="NowPlayingText" Margin="12,0,0,0" VerticalAlignment="Center" />
+
+                <Slider x:Name="VolumeSlider" Minimum="0" Maximum="1" Value="0.5" Width="150" Margin="20,0,0,0" ValueChanged="VolumeSlider_ValueChanged" />
             </StackPanel>
 
-            <Slider Grid.Column="1" Value="{Binding PlaybackPosition}" Maximum="{Binding TrackDuration}"
-                    VerticalAlignment="Center" Margin="10, 0"/>
-
-            <StackPanel Orientation="Horizontal" Grid.Column="2" VerticalAlignment="Center" Margin="10">
-                <TextBlock Text="🔊" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <Slider x:Name="VolumeSlider" Value="{Binding Volume}" Minimum="0" Maximum="100" Width="80" Margin="0,0,20,0"/>
-
-                <Button Content="Создать плейлист" Command="{Binding OpenPlaylistEditCommand}" Margin="5,0"/>
-                <Button Content="Управление библиотекой" Command="{Binding OpenAudioLibraryCommand}" Margin="5,0"/>
-                <Button Content="Премиум-подписка" Command="{Binding OpenPaymentWindowCommand}" Margin="5,0"/>
-            </StackPanel>
-            
-        </Grid>
+            <!-- MediaElement (скрытый) для воспроизведения -->
+            <MediaElement x:Name="Player" LoadedBehavior="Manual" UnloadedBehavior="Stop" Visibility="Collapsed" />
+        </StackPanel>
     </Grid>
 </Window>

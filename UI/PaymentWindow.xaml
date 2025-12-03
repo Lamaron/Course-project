@@ -1,0 +1,33 @@
+﻿<Window x:Class="UI.PaymentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="PaymentWindow" Height="300" Width="400">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Тариф" />
+            <ComboBox x:Name="TariffComboBox">
+                <ComboBoxItem Content="Месячный" />
+                <ComboBoxItem Content="Годовой" />
+            </ComboBox>
+
+            <TextBlock Text="Номер карты (тестовые данные)" Margin="0,8,0,0" />
+            <TextBox x:Name="CardNumberTextBox" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                <TextBox x:Name="ExpiryDateTextBox" Width="80" Text="MM/YY" />
+                <TextBox x:Name="CVVTextBox" Width="60" Margin="6,0,0,0" />
+            </StackPanel>
+
+            <TextBlock x:Name="AmountTextBlock" Text="Сумма: 0" Margin="0,8,0,0" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                <Button Content="Оплатить" Click="Pay_Click" Margin="0,0,8,0" />
+                <Button Content="Отмена" Click="Cancel_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

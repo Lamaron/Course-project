@@ -10,10 +10,12 @@ namespace Domain
     {
         public int Id { get; set; }
 
-        public int PlaylistId { get; set; }
+
+        public int Playlist_Id { get; set; }
         public Playlist Playlist { get; set; }
 
-        public int AudioFileId { get; set; }
+
+        public int Audio_File_Id { get; set; }
         public AudioFile AudioFile { get; set; }
     }
 }
