@@ -5,29 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="PaymentWindow" Height="300" Width="400">
-    <Grid Margin="10">
+        Title="PaymentWindow" Height="360" Width="400"
+        Background="{StaticResource BackgroundDarkBrush}">
+    <Grid Margin="20">
+
+        <TextBlock Text="Оплата Премиум"
+                   FontSize="20" FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
         <StackPanel>
-            <TextBlock Text="Тариф" />
-            <ComboBox x:Name="TariffComboBox">
-                <ComboBoxItem Content="Месячный" />
-                <ComboBoxItem Content="Годовой" />
+            <TextBlock Text="Выберите тариф" Padding="0,30,0,0"/>
+            <ComboBox x:Name="TariffComboBox" RenderTransformOrigin="0.499,1.406">
+                <ComboBoxItem Content="Месячный"/>
+                <ComboBoxItem Content="Годовой"/>
             </ComboBox>
 
-            <TextBlock Text="Номер карты (тестовые данные)" Margin="0,8,0,0" />
-            <TextBox x:Name="CardNumberTextBox" />
+            <TextBlock x:Name="AmountTextBlock" Margin="0,10"
+                       FontSize="16" Foreground="White"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                <TextBox x:Name="ExpiryDateTextBox" Width="80" Text="MM/YY" />
-                <TextBox x:Name="CVVTextBox" Width="60" Margin="6,0,0,0" />
-            </StackPanel>
-
-            <TextBlock x:Name="AmountTextBlock" Text="Сумма: 0" Margin="0,8,0,0" />
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-                <Button Content="Оплатить" Click="Pay_Click" Margin="0,0,8,0" />
-                <Button Content="Отмена" Click="Cancel_Click" />
-            </StackPanel>
+            <Button Content="Оплатить" Click="Pay_Click" Background="{StaticResource AccentBrush}"/>
+            <Button Content="Отмена" Click="Cancel_Click"/>
         </StackPanel>
+
     </Grid>
 </Window>
