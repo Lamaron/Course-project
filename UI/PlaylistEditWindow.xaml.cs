@@ -88,5 +88,10 @@ namespace UI
         {
             Close();
         }
+
+        private void AvailableTracksDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
