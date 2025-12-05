@@ -5,7 +5,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <!-- Цвета -->
         <Color x:Key="AccentColor">#4F7DFF</Color>
         <Color x:Key="BgDark">#1E1E1E</Color>
         <Color x:Key="BgLight">#2B2B2B</Color>
@@ -18,7 +17,6 @@
 
 
 
-        <!-- Стиль DataGrid -->
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="#1E1E1E"/>
             <Setter Property="Foreground" Value="White"/>
@@ -31,7 +29,6 @@
 
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="#F2F2F2"/>
-            <!-- светлый текст -->
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>

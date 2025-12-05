@@ -1,0 +1,60 @@
+﻿<Window x:Class="UI.PlaylistListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="Мои плейлисты" Height="500" Width="650"
+        Background="#1A1A1A"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Создать плейлист"
+                    Width="150"
+                    Height="32"
+                    Background="#FFCC00"
+                    Foreground="Black"
+                    Click="CreatePlaylist_Click"/>
+
+            <Button Content="Удалить"
+                    Width="120"
+                    Height="32"
+                    Margin="10,0,0,0"
+                    Click="DeletePlaylist_Click"/>
+        </StackPanel>
+
+        <DataGrid x:Name="PlaylistsGrid"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  Background="#1E1E1E"
+                  Foreground="#D6D6D6"
+                  Margin="0,15,0,0"
+                  IsReadOnly="True"
+                  MouseDoubleClick="PlaylistsGrid_MouseDoubleClick">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="2*"/>
+                <DataGridTextColumn Header="Треков" Binding="{Binding TrackCount}" Width="*"/>
+            </DataGrid.Columns>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#2D2D2D"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="BorderBrush" Value="#444"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+        </DataGrid>
+        
+    </Grid>
+</Window>

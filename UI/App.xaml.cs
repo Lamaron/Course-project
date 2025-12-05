@@ -15,7 +15,6 @@ namespace UI
             base.OnStartup(e);
 
 
-            // Ensure DB created
             using (var db = new MusicDbContext())
             {
                 db.Database.EnsureCreated();

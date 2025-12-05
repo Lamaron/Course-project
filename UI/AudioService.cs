@@ -19,31 +19,20 @@ namespace UI
             _player = player;
         }
 
-        /// <summary>
-        /// Воспроизводит файл по прямому URL или локальному пути
-        /// </summary>
         public void Play(string url)
         {
-            try
+            if (_isPaused)
             {
-                _currentUrl = url;
-
-                _player.Source = new Uri(url, UriKind.Absolute);
-                _player.LoadedBehavior = MediaState.Manual;
-                _player.UnloadedBehavior = MediaState.Manual;
-
                 _player.Play();
                 _isPaused = false;
+                return;
             }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Ошибка воспроизведения: " + ex.Message);
-            }
+
+            _player.Source = new Uri(url);
+            _player.Play();
+            _isPaused = false;
         }
 
-        /// <summary>
-        /// Переключатель Play/Pause
-        /// </summary>
         public void TogglePlayPause()
         {
             if (_player.Source == null && _currentUrl != null)
@@ -64,13 +53,17 @@ namespace UI
             }
         }
 
-        /// <summary>
-        /// Остановить воспроизведение
-        /// </summary>
+
         public void Stop()
         {
             _player.Stop();
             _isPaused = false;
+        }
+
+        public void Pause()
+        {
+            _player.Pause();
+            _isPaused = true;
         }
     }
 }

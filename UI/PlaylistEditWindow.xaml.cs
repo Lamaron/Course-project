@@ -7,9 +7,6 @@ using System.Windows;
 
 namespace UI
 {
-    /// <summary>
-    /// Логика взаимодействия для PlaylistEditWindow.xaml
-    /// </summary>
     public partial class PlaylistEditWindow : Window
     {
         private MusicDbContext _db = new MusicDbContext();
@@ -64,7 +61,6 @@ namespace UI
                 _db.SaveChanges();
             }
 
-            // Очистим старые записи
             var old = _db.PlaylistTracks.Where(p => p.Playlist_Id == _playlist.Id).ToList();
             if (old.Any())
             {

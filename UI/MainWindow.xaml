@@ -15,7 +15,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- 🔍 Поисковая панель -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <TextBox x:Name="SearchTextBox" Width="300" Height="32"
                      Text="Поиск..." />
@@ -23,9 +22,9 @@
             <Button Content="Создать плейлист" Click="CreatePlaylist_Click"/>
             <Button Content="Библиотека" Click="OpenLibrary_Click"/>
             <Button Content="Премиум" Click="OpenPayment_Click"/>
+            <Button Content="Плейлисты" Click="OpenPlaylistManager_Click"/>
         </StackPanel>
 
-        <!-- 📄 Таблица треков -->
         <DataGrid x:Name="MainDataGrid"
                   Grid.Row="1"
                   AutoGenerateColumns="False"
@@ -49,7 +48,6 @@
 
         </DataGrid>
 
-        <!-- ▶ Нижняя панель -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
             <Button Content="⏮" Width="40" Click="PreviousButton_Click"/>
             <Button Content="⏯" Width="40" Click="PlayButton_Click"/>

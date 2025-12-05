@@ -24,6 +24,10 @@ namespace UI
             _db = new MusicDbContext();
             _audioService = new AudioService(Player);
 
+            PlayerController.PlayExternal = PlayTrack;
+            PlayerController.Pause = () => _audioService.Pause();
+            PlayerController.SetVolume = (v) => Player.Volume = v;
+
             LoadTracks();
         }
 
@@ -33,7 +37,6 @@ namespace UI
             MainDataGrid.ItemsSource = _tracks;
         }
 
-        // ========= ПОИСК =========
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
@@ -46,7 +49,6 @@ namespace UI
             MainDataGrid.ItemsSource = filtered;
         }
 
-        // ========= ОТКРЫТИЕ ДРУГИХ ОКОН =========
 
         private void CreatePlaylist_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +70,6 @@ namespace UI
             w.ShowDialog();
         }
 
-        // ========= ВОСПРОИЗВЕДЕНИЕ =========
 
         private void MainDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -92,7 +93,7 @@ namespace UI
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            _audioService.TogglePlayPause();
+            PlayerController.PlayExternal = PlayTrack;
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -119,10 +120,16 @@ namespace UI
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (Player == null)
-                return;
-
-            Player.Volume = VolumeSlider.Value;
+            PlayerController.SetVolume = (v) => Player.Volume = v;
         }
+
+        private void OpenPlaylistManager_Click(object sender, RoutedEventArgs e)
+        {
+            var w = new PlaylistListWindow();
+            w.ShowDialog();
+        }
+
+
+
     }
 }
