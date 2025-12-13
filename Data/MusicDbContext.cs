@@ -7,7 +7,6 @@ namespace Data
     public class MusicDbContext : DbContext
     {
         public DbSet<AudioFile> AudioFiles { get; set; }
-        public DbSet<Album> Albums { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<PlaylistTrack> PlaylistTracks { get; set; }
 

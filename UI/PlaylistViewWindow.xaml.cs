@@ -20,7 +20,6 @@ namespace UI
             _playlist = _db.Playlists
                 .Include(p => p.PlaylistTracks)
                 .ThenInclude(pt => pt.AudioFile)
-                .ThenInclude(a => a.Album)
                 .FirstOrDefault(p => p.Id == playlistId);
 
             if (_playlist == null)

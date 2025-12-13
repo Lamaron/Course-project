@@ -17,15 +17,15 @@
 
         <StackPanel Orientation="Horizontal">
             <Button Content="Создать плейлист"
-                    Width="150"
-                    Height="32"
+                    Width="160"
+                    Height="40"
                     Background="#FFCC00"
                     Foreground="Black"
                     Click="CreatePlaylist_Click"/>
 
             <Button Content="Удалить"
                     Width="120"
-                    Height="32"
+                    Height="40"
                     Margin="10,0,0,0"
                     Click="DeletePlaylist_Click"/>
         </StackPanel>
