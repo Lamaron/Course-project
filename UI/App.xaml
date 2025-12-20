@@ -5,6 +5,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+
         <Color x:Key="AccentColor">#4F7DFF</Color>
         <Color x:Key="BgDark">#1E1E1E</Color>
         <Color x:Key="BgLight">#2B2B2B</Color>
@@ -33,6 +35,15 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Background" Value="#1E1E1E"/>
+        </Style>
+
+        <Style TargetType="Thumb">
+            <Setter Property="Background" Value="#555"/>
+        </Style>
+
         <Style TargetType="DataGridCell">
             <Setter Property="Foreground" Value="#E8E8E8"/>
             <Setter Property="FontSize" Value="15"/>
@@ -53,6 +64,7 @@
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
-
     </Application.Resources>
+    
+    
 </Application>

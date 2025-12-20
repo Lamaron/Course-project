@@ -5,6 +5,7 @@ using Data;
 using Domain;
 using System.Collections.ObjectModel;
 using System.IO;
+using TagLib;
 
 namespace UI
 {
@@ -29,6 +30,37 @@ namespace UI
             foreach (var f in _db.AudioFiles.ToList()) _files.Add(f);
         }
 
+        private AudioFile CreateAudioFromFile(string filePath)
+        {
+            var tagFile = TagLib.File.Create(filePath);
+
+            string title = string.IsNullOrWhiteSpace(tagFile.Tag.Title)
+                ? Path.GetFileNameWithoutExtension(filePath)
+                : tagFile.Tag.Title;
+
+            string author = tagFile.Tag.FirstPerformer ?? "Unknown";
+
+            TimeSpan dur = tagFile.Properties.Duration;
+
+            byte[] cover = null;
+
+            if (tagFile.Tag.Pictures != null && tagFile.Tag.Pictures.Length > 0)
+            {
+                cover = tagFile.Tag.Pictures[0].Data.Data;
+            }
+
+            return new AudioFile
+            {
+                Name = title,
+                Author = author,
+                URL = new Uri(filePath).AbsoluteUri,
+                duration = dur,
+
+
+                CoverImage = cover ?? new byte[0]
+            };
+        }
+
         private void ImportFolder_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new Microsoft.Win32.OpenFileDialog
@@ -51,13 +83,7 @@ namespace UI
 
                 foreach (var f in files)
                 {
-                    var af = new AudioFile
-                    {
-                        Name = Path.GetFileNameWithoutExtension(f),
-                        Author = "Unknown",
-                        URL = new Uri(f).AbsoluteUri
-                    };
-
+                    var af = CreateAudioFromFile(f);
                     _db.AudioFiles.Add(af);
                 }
 

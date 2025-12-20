@@ -15,6 +15,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="PlaylistNameText"
@@ -32,14 +33,42 @@
                   Foreground="#D6D6D6"
                   RowBackground="#252525"
                   AlternatingRowBackground="#2E2E2E"
-                  Margin="0 10 0 10">
+                  Margin="0 10 0 10"
+                  RowHeight="60"
+                  HeadersVisibility="Column">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Binding="{Binding AudioFile.Name}" Width="2*"/>
-                <DataGridTextColumn Header="Исполнитель" Binding="{Binding AudioFile.Author}" Width="*"/>
-                <DataGridTextColumn Header="Альбом" Binding="{Binding AudioFile.Album.Name}" Width="*"/>
+                <DataGridTemplateColumn Header="" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Width="48" Height="48" CornerRadius="6" Background="#333">
+                                <Image Source="{Binding AudioFile.CoverImage,
+                            Converter={StaticResource ByteArrayToImageConverter}}"
+                           Stretch="UniformToFill"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Название"
+                        Binding="{Binding AudioFile.Name}"
+                        Width="2*"/>
+
+                <DataGridTextColumn Header="Исполнитель"
+                        Binding="{Binding AudioFile.Author}"
+                        Width="*"/>
+
             </DataGrid.Columns>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Foreground" Value="#D6D6D6"/>
+                    <Setter Property="Background" Value="#2A2A2A"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
         </DataGrid>
+        
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10">
 
@@ -51,10 +80,28 @@
             <TextBlock Text="Громкость" Foreground="White" Margin="20 0 10 0" VerticalAlignment="Center"/>
             <Slider x:Name="VolumeSlider" Width="150" Minimum="0" Maximum="1" Value="0.5"
                     ValueChanged="VolumeSlider_ValueChanged"/>
+            
 
         </StackPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+        <StackPanel Grid.Row="3" Margin="50 5 50 10">
+
+            <Slider x:Name="TimelineSlider"
+            Minimum="0"
+            ValueChanged="TimelineSlider_ValueChanged"
+            PreviewMouseDown="Timeline_PreviewMouseDown"
+            PreviewMouseUp="Timeline_PreviewMouseUp"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock x:Name="CurrentTimeText" Text="00:00"/>
+                <TextBlock Text=" / "/>
+                <TextBlock x:Name="TotalTimeText" Text="00:00"/>
+            </StackPanel>
+
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
             <Button Content="Редактировать"
                     Width="150" Height="40"
                     Background="#FFCC00"

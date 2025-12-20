@@ -17,6 +17,11 @@ namespace UI
         public AudioService(MediaElement player)
         {
             _player = player;
+            _player.MediaEnded += (s, e) =>
+            {
+                _isPaused = false;
+                PlayerController.Next?.Invoke();
+            };
         }
 
         public void Play(string url)
@@ -65,5 +70,6 @@ namespace UI
             _player.Pause();
             _isPaused = true;
         }
+
     }
 }

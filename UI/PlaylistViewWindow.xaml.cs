@@ -2,8 +2,10 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace UI
 {
@@ -12,6 +14,7 @@ namespace UI
         private MusicDbContext _db = new MusicDbContext();
         private Playlist _playlist;
         private int _currentIndex = -1;
+        private bool _isDragging;
 
         public PlaylistViewWindow(int playlistId)
         {
@@ -32,6 +35,8 @@ namespace UI
             PlaylistNameText.Text = _playlist.Name;
 
             TracksGrid.ItemsSource = _playlist.PlaylistTracks;
+
+            InitTimer();
         }
 
         private void TracksGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -113,6 +118,54 @@ namespace UI
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             PlayerController.SetVolume?.Invoke(VolumeSlider.Value);
+        }
+
+        DispatcherTimer _timer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+
+        private void InitTimer()
+        {
+            _timer.Tick += (s, e) =>
+            {
+                var pos = PlayerController.GetPosition?.Invoke();
+                var dur = PlayerController.GetDuration?.Invoke();
+
+                if (pos == null || dur == null)
+                    return;
+
+                if (!_isDragging)
+                    TimelineSlider.Value = pos.Value.TotalSeconds;
+
+                TimelineSlider.Maximum = dur.Value.TotalSeconds;
+
+                CurrentTimeText.Text = pos.Value.ToString(@"mm\:ss");
+                TotalTimeText.Text = dur.Value.ToString(@"mm\:ss");
+            };
+
+            _timer.Start();
+        }
+
+
+
+        private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (_isDragging)
+                PlayerController.Seek?.Invoke(
+                    TimeSpan.FromSeconds(TimelineSlider.Value));
+        }
+
+        private void Timeline_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _isDragging = true;
+        }
+
+        private void Timeline_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            _isDragging = false;
+            PlayerController.Seek?.Invoke(
+                TimeSpan.FromSeconds(TimelineSlider.Value));
         }
 
     }

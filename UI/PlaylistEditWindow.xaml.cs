@@ -12,13 +12,18 @@ namespace UI
         private MusicDbContext _db = new MusicDbContext();
         private Playlist _playlist;
 
+        private List<AudioFile> _allTracks;
+        private List<PlaylistTrack> _playlistTracks;
+
         private ObservableCollection<AudioFile> _available = new ObservableCollection<AudioFile>();
-        private ObservableCollection<PlaylistTrack> _playlistTracks = new ObservableCollection<PlaylistTrack>();
 
         public PlaylistEditWindow(Playlist playlist = null)
         {
             InitializeComponent();
-            _playlist = playlist ?? new Playlist();
+            _playlist = playlist ?? new Playlist
+            {
+                PlaylistTracks = new List<PlaylistTrack>()
+            };
 
             PlaylistNameTextBox.Text = _playlist.Name;
 
@@ -32,14 +37,24 @@ namespace UI
             }
 
             PlaylistTracksDataGrid.ItemsSource = _playlistTracks;
+            LoadTracks();
         }
 
         private void AddTrack_Click(object sender, RoutedEventArgs e)
         {
-            if (AvailableTracksDataGrid.SelectedItem is AudioFile a)
+            if (AvailableTracksDataGrid.SelectedItem is AudioFile track)
             {
-                var pt = new PlaylistTrack { AudioFile = a, Audio_File_Id = a.Id };
+                if (_playlistTracks.Any(pt => pt.Audio_File_Id == track.Id))
+                    return;
+
+                var pt = new PlaylistTrack
+                {
+                    AudioFile = track,
+                    Audio_File_Id = track.Id
+                };
+
                 _playlistTracks.Add(pt);
+                PlaylistTracksDataGrid.Items.Refresh();
             }
         }
 
@@ -48,34 +63,19 @@ namespace UI
             if (PlaylistTracksDataGrid.SelectedItem is PlaylistTrack pt)
             {
                 _playlistTracks.Remove(pt);
+                PlaylistTracksDataGrid.Items.Refresh();
             }
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             _playlist.Name = PlaylistNameTextBox.Text;
+            _playlist.PlaylistTracks = _playlistTracks;
 
             if (_playlist.Id == 0)
-            {
                 _db.Playlists.Add(_playlist);
-                _db.SaveChanges();
-            }
 
-            var old = _db.PlaylistTracks.Where(p => p.Playlist_Id == _playlist.Id).ToList();
-            if (old.Any())
-            {
-                _db.PlaylistTracks.RemoveRange(old);
-                _db.SaveChanges();
-            }
-
-            foreach (var pt in _playlistTracks)
-            {
-                pt.Playlist_Id = _playlist.Id;
-                pt.Audio_File_Id = pt.AudioFile.Id;
-                _db.PlaylistTracks.Add(pt);
-            }
             _db.SaveChanges();
-
             DialogResult = true;
             Close();
         }
@@ -88,6 +88,16 @@ namespace UI
         private void AvailableTracksDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void LoadTracks()
+        {
+            _allTracks = _db.AudioFiles.ToList();
+
+            _playlistTracks = _playlist.PlaylistTracks.ToList();
+
+            AvailableTracksDataGrid.ItemsSource = _allTracks;
+            PlaylistTracksDataGrid.ItemsSource = _playlistTracks;
         }
     }
 }
