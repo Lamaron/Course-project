@@ -10,10 +10,12 @@ namespace UI
     public partial class PlaylistListWindow : Window
     {
         private MusicDbContext _db = new MusicDbContext();
+        private AudioService _audioService;
 
-        public PlaylistListWindow()
+        public PlaylistListWindow(AudioService audioService)
         {
             InitializeComponent();
+            _audioService = audioService;
             LoadPlaylists();
         }
 
@@ -64,7 +66,7 @@ namespace UI
             dynamic pl = PlaylistsGrid.SelectedItem;
             int id = pl.Id;
 
-            var view = new PlaylistViewWindow(id);
+            var view = new PlaylistViewWindow(id, _audioService);
             view.ShowDialog();
         }
     }

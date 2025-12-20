@@ -13,12 +13,15 @@ namespace UI
     {
         private MusicDbContext _db = new MusicDbContext();
         private Playlist _playlist;
-        private int _currentIndex = -1;
+        private AudioService _audioService;
         private bool _isDragging;
 
-        public PlaylistViewWindow(int playlistId)
+
+
+        public PlaylistViewWindow(int playlistId, AudioService audioService)
         {
             InitializeComponent();
+
 
             _playlist = _db.Playlists
                 .Include(p => p.PlaylistTracks)
@@ -31,9 +34,9 @@ namespace UI
                 Close();
                 return;
             }
+            _audioService = audioService;
 
             PlaylistNameText.Text = _playlist.Name;
-
             TracksGrid.ItemsSource = _playlist.PlaylistTracks;
 
             InitTimer();
@@ -43,8 +46,11 @@ namespace UI
         {
             if (TracksGrid.SelectedItem is PlaylistTrack pt)
             {
-                _currentIndex = TracksGrid.Items.IndexOf(pt);
-                PlayerController.PlayTrack(pt.AudioFile);
+                var tracks = _playlist.PlaylistTracks
+                    .Select(t => t.AudioFile)
+                    .ToList();
+
+                _audioService.SetPlaylist(tracks, tracks.IndexOf(pt.AudioFile));
             }
         }
 
@@ -69,91 +75,63 @@ namespace UI
             Close();
         }
 
-        private void PlayCurrent()
-        {
-            if (_currentIndex < 0 || _currentIndex >= _playlist.PlaylistTracks.Count)
-                return;
-
-            var track = _playlist.PlaylistTracks.ElementAt(_currentIndex).AudioFile;
-
-            PlayerController.PlayTrack(track);
-        }
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentIndex == -1 && _playlist.PlaylistTracks.Count > 0)
-                _currentIndex = 0;
-
-            var track = _playlist.PlaylistTracks.ElementAt(_currentIndex).AudioFile;
-            PlayerController.PlayTrack(track);
+            _audioService.TogglePlayPause();
         }
 
-        private void Pause_Click(object sender, RoutedEventArgs e)
-        {
-            PlayerController.Pause?.Invoke();
-        }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (TracksGrid.Items.Count == 0) return;
-
-            _currentIndex++;
-            if (_currentIndex >= _playlist.PlaylistTracks.Count)
-                _currentIndex = 0;
-
-            PlayCurrent();
+            _audioService.Next();
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
-            if (TracksGrid.Items.Count == 0) return;
-
-            _currentIndex--;
-            if (_currentIndex < 0)
-                _currentIndex = _playlist.PlaylistTracks.Count - 1;
-
-            PlayCurrent();
+            _audioService.Previous();
         }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            PlayerController.SetVolume?.Invoke(VolumeSlider.Value);
+            if (_audioService == null)
+                return;
+
+            _audioService.SetVolume(e.NewValue);
         }
 
-        DispatcherTimer _timer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(1)
-        };
+
 
         private void InitTimer()
         {
-            _timer.Tick += (s, e) =>
+            var timer = new DispatcherTimer
             {
-                var pos = PlayerController.GetPosition?.Invoke();
-                var dur = PlayerController.GetDuration?.Invoke();
-
-                if (pos == null || dur == null)
-                    return;
-
-                if (!_isDragging)
-                    TimelineSlider.Value = pos.Value.TotalSeconds;
-
-                TimelineSlider.Maximum = dur.Value.TotalSeconds;
-
-                CurrentTimeText.Text = pos.Value.ToString(@"mm\:ss");
-                TotalTimeText.Text = dur.Value.ToString(@"mm\:ss");
+                Interval = TimeSpan.FromSeconds(1)
             };
 
-            _timer.Start();
+            timer.Tick += (s, e) =>
+            {
+                if (_audioService == null) return;
+
+                if (!_isDragging)
+                    TimelineSlider.Value = _audioService.Position.TotalSeconds;
+
+                TimelineSlider.Maximum = _audioService.Duration.TotalSeconds;
+                CurrentTimeText.Text = _audioService.Position.ToString(@"mm\:ss");
+                TotalTimeText.Text = _audioService.Duration.ToString(@"mm\:ss");
+            };
+
+            timer.Start();
         }
 
 
 
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (_isDragging)
-                PlayerController.Seek?.Invoke(
-                    TimeSpan.FromSeconds(TimelineSlider.Value));
+            if (_audioService == null || _isDragging)
+                return;
+
+            _audioService.Seek(TimeSpan.FromSeconds(e.NewValue));
         }
 
         private void Timeline_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -164,8 +142,7 @@ namespace UI
         private void Timeline_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;
-            PlayerController.Seek?.Invoke(
-                TimeSpan.FromSeconds(TimelineSlider.Value));
+            _audioService.Seek(TimeSpan.FromSeconds(TimelineSlider.Value));
         }
 
     }

@@ -74,7 +74,6 @@
 
             <Button Content="⏮" Width="50" Height="40" Margin="5" Click="Prev_Click"/>
             <Button Content="▶"  Width="50" Height="40" Margin="5" Click="Play_Click"/>
-            <Button Content="⏸" Width="50" Height="40" Margin="5" Click="Pause_Click"/>
             <Button Content="⏭" Width="50" Height="40" Margin="5" Click="Next_Click"/>
 
             <TextBlock Text="Громкость" Foreground="White" Margin="20 0 10 0" VerticalAlignment="Center"/>

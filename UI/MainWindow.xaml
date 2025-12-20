@@ -101,7 +101,7 @@
             <Button Content="⏭" Width="40" Click="NextButton_Click"/>
 
             <TextBlock x:Name="NowPlayingText" Margin="20,0" VerticalAlignment="Center"
-                       Foreground="White" Width="500"/>
+                       Foreground="White" Width="400"/>
 
             <Slider x:Name="VolumeSlider"
                     Minimum="0" Maximum="1" Value="0.5" Width="150"
