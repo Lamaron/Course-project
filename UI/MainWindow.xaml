@@ -93,8 +93,6 @@
 
         </DataGrid>
 
-
-
         <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="50 5 50 10">
             <Button Content="⏮" Width="40" Click="PreviousButton_Click"/>
             <Button Content="⏯" Width="40" Click="PlayButton_Click"/>
@@ -107,19 +105,12 @@
                     Minimum="0" Maximum="1" Value="0.5" Width="150"
                     ValueChanged="VolumeSlider_ValueChanged"
                     Margin="20,20"/>
-
-            
-
-            
-
-
         </StackPanel>
         <MediaElement x:Name="Player"
                       LoadedBehavior="Manual"
                       UnloadedBehavior="Stop"
                       Visibility="Collapsed"
                       MediaOpened="Player_MediaOpened"/>
-
 
         <StackPanel Grid.Row="3" Margin="50 5 50 10">
 

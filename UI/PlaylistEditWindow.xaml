@@ -39,11 +39,18 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0">
+            <Grid Grid.Column="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
                 <TextBlock Text="Все треки"
                            FontSize="17"
                            FontWeight="Bold"
-                           Foreground="#FFCC00"/>
+                           Foreground="#FFCC00"
+                           Grid.Row="0"/>
 
                 <DataGrid x:Name="AvailableTracksDataGrid"
                           Margin="0,10,10,0"
@@ -62,6 +69,7 @@
                           VirtualizingPanel.ScrollUnit="Pixel"
                           EnableRowVirtualization="True"
                           EnableColumnVirtualization="True"
+                          Grid.Row="1"
                           BorderThickness="1" SelectionChanged="AvailableTracksDataGrid_SelectionChanged">
 
                     <DataGrid.RowStyle>
@@ -91,7 +99,7 @@
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
                 </DataGrid>
-            </StackPanel>
+            </Grid>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Content="➜"

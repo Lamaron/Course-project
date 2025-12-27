@@ -19,9 +19,6 @@
             <Button Content="Добавить папку" Click="ImportFolder_Click"
                     Background="#3A3A3A" Foreground="White" Padding="8" Margin="4"/>
 
-            <Button Content="Редактировать трек" Click="EditTags_Click"
-                    Background="#3A3A3A" Foreground="White" Padding="8" Margin="4"/>
-
             <Button Content="Удалить" Click="Delete_Click"
                     Background="#3A3A3A" Foreground="White" Padding="8" Margin="4"/>
         </StackPanel>
@@ -71,7 +68,6 @@
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="2*"/>
                 <DataGridTextColumn Header="Исполнитель" Binding="{Binding Author}" Width="2*"/>
                 <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Name}" Width="2*"/>
-                <DataGridTextColumn Header="URL" Binding="{Binding URL}" Width="3*"/>
             </DataGrid.Columns>
 
         </DataGrid>

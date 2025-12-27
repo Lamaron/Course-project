@@ -83,21 +83,6 @@ namespace UI
             }
         }
 
-        public void Pause()
-        {
-            if (_player.Source == null)
-                return;
-
-            _player.Pause();
-            _isPaused = true;
-        }
-
-        public void Stop()
-        {
-            _player.Stop();
-            _isPaused = false;
-        }
-
 
         public void Next()
         {

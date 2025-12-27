@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using Data;
+﻿using Data;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace UI
 {
@@ -15,6 +16,9 @@ namespace UI
         {
             InitializeComponent();
             TariffComboBox.SelectionChanged += TariffComboBox_SelectionChanged;
+            ExpiryTextBox.TextChanged += ExpiryTextBox_TextChanged;
+
+
         }
 
         private void TariffComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -45,6 +49,57 @@ namespace UI
 
             CardNumberTextBox.Text = formatted;
             CardNumberTextBox.CaretIndex = formatted.Length;
+
+            _isFormatting = false;
+        }
+
+        private void ExpiryTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isFormatting) return;
+            _isFormatting = true;
+
+            string text = ExpiryTextBox.Text;
+
+            string digits = new string(text.Where(char.IsDigit).ToArray());
+
+            if (digits.Length > 4)
+                digits = digits.Substring(0, 4);
+
+            string formatted = "";
+            for (int i = 0; i < digits.Length; i++)
+            {
+                if (i == 2)
+                    formatted += "/";
+                formatted += digits[i];
+            }
+
+            if (digits.Length >= 1)
+            {
+                int firstDigit = digits[0] - '0';
+                if (firstDigit > 1)
+                {
+                    formatted = "0" + firstDigit;
+                    if (digits.Length > 1)
+                        formatted += "/" + digits.Substring(1);
+                }
+            }
+
+            if (digits.Length >= 2)
+            {
+                int month = int.Parse(digits.Substring(0, 2));
+                if (month > 12)
+                {
+                    formatted = "12";
+                    if (digits.Length > 2)
+                        formatted += "/" + digits[2];
+                    if (digits.Length > 3)
+                        formatted += digits[3];
+                }
+            }
+
+            ExpiryTextBox.Text = formatted;
+
+            ExpiryTextBox.CaretIndex = formatted.Length;
 
             _isFormatting = false;
         }

@@ -169,9 +169,5 @@ namespace UI
             _isDragging = false;
             _audioService.Seek(TimeSpan.FromSeconds(TimelineSlider.Value));
         }
-
-
-
-
     }
 }

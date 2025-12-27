@@ -92,15 +92,6 @@ namespace UI
             }
         }
 
-        private void EditTags_Click(object sender, RoutedEventArgs e)
-        {
-            if (AudioFilesDataGrid.SelectedItem is AudioFile af)
-            {
-                var w = new AudioDataEditWindow(af.Id);
-                w.ShowDialog();
-                LoadFiles();
-            }
-        }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
